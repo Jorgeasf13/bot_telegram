@@ -1,8 +1,15 @@
 import telebot
 import datetime
+import MySQLdb
 from telebot import types
 
+host = "localhost"
+user = "root"
+password = "Superchargers3"
+db = "bot_telegram"
+porta = 3306
 
+con = MySQLdb.connect(host, user, password, db, porta)
 
 
 API_TOKEN = '<930897758:AAFcce3GwyeOEwS7smiZYDlZUUXQgI9C1dk>'
