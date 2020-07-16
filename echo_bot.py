@@ -1,15 +1,13 @@
 import telebot
 import datetime
-import MySQLdb
 from telebot import types
 
-host = "localhost"
-user = "root"
-password = "Superchargers3"
-db = "bot_telegram"
-porta = 3306
+import sqlite3
 
-con = MySQLdb.connect(host, user, password, db, porta)
+conn = sqlite3.connect('clientes.db')
+cursor = conn.cursor()
+
+
 
 
 API_TOKEN = '<930897758:AAFcce3GwyeOEwS7smiZYDlZUUXQgI9C1dk>'
@@ -92,7 +90,12 @@ def process_sex_step(message):
     except Exception as e:
         bot.reply_to(message, 'oooops')
 
+cursor.execute("""
+    INSERT INTO clientes(nome, idade, sexo)
+    VALUES ('user.name', 'user.age', 'user.sex')
+""")
 
+conn.close()
 # Enable saving next step handlers to file "./.handlers-saves/step.save".
 # Delay=2 means that after any change in next step handlers (e.g. calling register_next_step_handler())
 # saving will hapen after delay 2 seconds.
