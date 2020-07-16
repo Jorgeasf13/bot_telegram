@@ -4,7 +4,7 @@ from telebot import types
 
 import sqlite3
 
-conn = sqlite3.connect('clientes.db')
+conn = sqlite3.connect('clientes.db', check_same_thread= False)
 cursor = conn.cursor()
 
 
@@ -87,22 +87,23 @@ def process_sex_step(message):
         else:
             raise Exception()
         bot.send_message(chat_id, 'Prazer em te conhecer ' + user.name + '\n idade:' + str(user.age) + '\n sexo:' + user.sex)
+        cursor.execute("""
+            INSERT INTO clientes(nome, idade, sexo)
+            VALUES ('user.name', 'user.age', 'user.sex')
+        """)
+        conn.commit()
+        print("Dados inseridos com sucesso.")
+        conn.close()
     except Exception as e:
         bot.reply_to(message, 'oooops')
+        print(e)
 
-cursor.execute("""
-    INSERT INTO clientes(nome, idade, sexo)
-    VALUES ('user.name', 'user.age', 'user.sex')
-""")
 
-conn.close()
-# Enable saving next step handlers to file "./.handlers-saves/step.save".
-# Delay=2 means that after any change in next step handlers (e.g. calling register_next_step_handler())
-# saving will hapen after delay 2 seconds.
+
+
 bot.enable_save_next_step_handlers(delay=2)
 
-# Load next_step_handlers from save file (default "./.handlers-saves/step.save")
-# WARNING It will work only if enable_save_next_step_handlers was called!
+
 bot.load_next_step_handlers()
 
 bot.polling()
@@ -111,23 +112,3 @@ bot.polling()
 
 
 
-'''
-@bot.message_handler(commands=['start', 'help'])
-def send_welcome(message):
-    bot.reply_to(message, "Boa noite, qual o seu nome?")
-
-
-@bot.message_handler(nome = (input))
-def send_welcome(message):
-    bot.reply_to(message, "Tudo bem "+ nome + "?")
-
-
-
-@bot.message_handler(func=lambda m: True)
-def echo_all(message):
-    bot.reply_to(message, message.text)
-
-
-bot.polling()
-
-'''
