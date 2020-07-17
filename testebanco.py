@@ -1,18 +1,20 @@
-# 06_read_data.py
 import sqlite3
 
+# conectando...
 conn = sqlite3.connect('clientes.db')
+# definindo um cursor
 cursor = conn.cursor()
 
-# lendo os dados
+# criando a tabela (schema)
 cursor.execute("""
-SELECT * FROM clientes;
+CREATE TABLE clientes (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        idade INTEGER,
+        sexo TEXT
+    );
 """)
 
-for linha in cursor.fetchall():
-    print(linha)
-
+print('Tabela criada com sucesso.')
+# desconectando...
 conn.close()
-
-
-

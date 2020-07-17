@@ -69,7 +69,7 @@ def process_age_step(message):
         user = user_dict[chat_id]
         user.age = age
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-        markup.add('Male', 'Female')
+        markup.add('Masculino', 'Fenminino')
         msg = bot.reply_to(message, 'Qual o seu sexo?', reply_markup=markup)
         bot.register_next_step_handler(msg, process_sex_step)
     except Exception as e:
@@ -82,14 +82,15 @@ def process_sex_step(message):
         chat_id = message.chat.id
         sex = message.text
         user = user_dict[chat_id]
-        if (sex == u'Male') or (sex == u'Female'):
+        if (sex == u'Masculino') or (sex == u'Feminino'):
             user.sex = sex
         else:
             raise Exception()
-        bot.send_message(chat_id, 'Prazer em te conhecer ' + user.name + '\n idade:' + str(user.age) + '\n sexo:' + user.sex)
-        cursor.execute("""
+        bot.send_message(chat_id, f"Prazer em te conhecer {user.name} \nIDADE {user.age} \n SEXO {user.sex}")
+        
+        cursor.execute(f"""
             INSERT INTO clientes(nome, idade, sexo)
-            VALUES ('user.name', 'user.age', 'user.sex')
+            VALUES ("{user.name}", {user.age}, "{user.sex}")
         """)
         conn.commit()
         print("Dados inseridos com sucesso.")
