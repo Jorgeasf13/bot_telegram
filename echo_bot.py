@@ -69,7 +69,7 @@ def process_age_step(message):
         user = user_dict[chat_id]
         user.age = age
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-        markup.add('Masculino', 'Fenminino')
+        markup.add('Masculino', 'Feminino')
         msg = bot.reply_to(message, 'Qual o seu sexo?', reply_markup=markup)
         bot.register_next_step_handler(msg, process_sex_step)
     except Exception as e:
