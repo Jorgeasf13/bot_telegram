@@ -94,13 +94,20 @@ def process_sex_step(message):
         """)
         conn.commit()
         print("Dados inseridos com sucesso.")
-        conn.close()
+        
     except Exception as e:
         bot.reply_to(message, 'oooops')
         print(e)
 
-
-
+@bot.message_handler(commands=['data', 'dados'])
+def send_message(message): 
+    cursor.execute("""
+    SELECT * FROM clientes;
+    """)
+    for linha in cursor.fetchall():
+        bot.send_message('')
+    conn.close()
+    
 
 bot.enable_save_next_step_handlers(delay=2)
 
