@@ -87,7 +87,6 @@ def process_sex_step(message):
         else:
             raise Exception()
         bot.send_message(chat_id, f"Prazer em te conhecer {user.name} \nIDADE {user.age} \n SEXO {user.sex}")
-        
         cursor.execute(f"""
             INSERT INTO clientes(nome, idade, sexo)
             VALUES ("{user.name}", {user.age}, "{user.sex}")
@@ -100,14 +99,18 @@ def process_sex_step(message):
         print(e)
 
 @bot.message_handler(commands=['data', 'dados'])
-def send_message(message): 
-    cursor.execute("""
-    SELECT * FROM clientes;
-    """)
-    for linha in cursor.fetchall():
-        bot.send_message('')
-    conn.close()
-    
+def send_data(message):
+    try:
+        cursor.execute("""
+        SELECT * FROM clientes;
+        """)
+        resultado = ' '
+        for linha in cursor.fetchall():
+            resultado += f"{linha}"
+        bot.send_message(message.chat.id, resultado)
+    except Exception as e:
+        print(e)
+        conn.close()
 
 bot.enable_save_next_step_handlers(delay=2)
 
